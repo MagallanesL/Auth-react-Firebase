@@ -4,7 +4,7 @@ import {Context} from "../context/authContext"
 
 function home() {
   
-  const authContext = useContext(context)
+  const authContext = useContext(Context)
   console.log(authContext);
   
   return (
