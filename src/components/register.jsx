@@ -10,6 +10,8 @@ export function Register() {
 
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const [error, setError] = useState()
+
 
   const handleChange = ({ target: { name, value } }) => {
     setUser({ ...user, [name]: value });
@@ -21,10 +23,14 @@ export function Register() {
       await signup(user.email, user.password);
       navigate("/");
     } catch (error) {
-      console.log(error);
+      setError(error.message);
     }
   };
   
+
+
+  {error && <p>{error}</p>}
+
   {/* Inicio Formulario de Registro */}
   return (
     <div className="Register-container">

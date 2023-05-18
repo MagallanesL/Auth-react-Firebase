@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
   const [user, setUser] = useState({
@@ -6,21 +8,37 @@ export function Login() {
     password: "",
   });
 
-  const handleChange = ({target:{name, value}}) => {
-    setUser({...user, [name]: value});
+  const { login} = useAuth();
+  const navigate = useNavigate();
+  const [error, setError] = useState()
+
+
+  const handleChange = ({ target: { name, value } }) => {
+    setUser({ ...user, [name]: value });
   };
 
-
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      await login(user.email, user.password);
+      navigate("/");
+    } catch (error) {
+      setError(error.message);
+    }
   };
+  
+
+
+  {error && <p>{error}</p>}
+
+
+  
+  {/* Inicio Formulario de Login */}
 
   return (
     <div className="login-container">
-      {/* Inicio Formulario de Login */}
       <form onSubmit={handleSubmit}>
-        <h1 className="h3 mb-3 fw-normal">Welcome</h1>
+        <h1 className="h3 mb-3 fw-normal">Sign In</h1>
         <div className="form-floating mb-3">
           <input
             type="email"
@@ -44,10 +62,10 @@ export function Login() {
           <label htmlFor="password">Password</label>
         </div>
         <button className="btn btn-primary" type="submit">
-          Login
+          login
         </button>
       </form>
-      {/* Fin Formulario de Login */}
+      {/* Fin Formulario de Registro */}
     </div>
   );
 }
